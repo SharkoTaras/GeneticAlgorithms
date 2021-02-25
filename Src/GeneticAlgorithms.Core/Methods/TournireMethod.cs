@@ -35,7 +35,8 @@ namespace GeneticAlgorithms.Core.Methods
             var count = Population.Count;
             for (var i = 0; i < IndividualsCount; i++)
             {
-                list.Add(Population[random.Next(0, count + 1)]);
+                var ind = random.Next(0, count);
+                list.Add(Population[ind]);
             }
             return list.OrderBy(s => eval(s)).First();
         }

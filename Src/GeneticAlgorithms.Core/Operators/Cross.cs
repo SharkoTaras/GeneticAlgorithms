@@ -10,10 +10,11 @@ namespace GeneticAlgorithms.Core.Operators
         #region Private Fields
         private Random random;
         #endregion
+
         #region Constructors
-        public CrossOperator(double crossProbability)
+        public CrossOperator(double crossProbability, Random random = null)
         {
-            random = new Random();
+            this.random = random ?? new Random();
             CrossProbability = crossProbability;
         }
         #endregion
@@ -27,15 +28,23 @@ namespace GeneticAlgorithms.Core.Operators
             var randomNumber = random.NextDouble();
             if (randomNumber < CrossProbability)
             {
-                var ind = random.Next(0, parrent1.Count + 1);
-                var p1Bits = parrent1.Skip(ind);
-                var p2Bits = parrent2.Skip(ind);
+                var count = parrent1.Count;
+                var ind = random.Next(0, count);
+                var p1Bits = parrent1.Skip(count - ind - 1).ToList();
+                var p2Bits = parrent2.Skip(count - ind - 1).ToList();
 
-                parrent1.RemoveRange(ind, parrent1.Count - ind);
-                parrent2.RemoveRange(ind, parrent1.Count - ind);
+                var c1 = new BitString(parrent1.Value);
+                var c2 = new BitString(parrent2.Value);
 
-                parrent1.AddRange(p2Bits);
-                parrent2.AddRange(p1Bits);
+                for (int i = count - ind - 1, j = count - ind - 1; i < count; i++)
+                {
+                    c1.RemoveAt(j);
+                    c2.RemoveAt(j);
+                }
+
+                c1.AddRange(p2Bits);
+                c2.AddRange(p1Bits);
+                return new BitString[] { c1, c2 };
             }
             return new BitString[] { parrent1, parrent2 };
         }

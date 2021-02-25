@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using GeneticAlgorithms.Core.Extensions;
 
 namespace GeneticAlgorithms.Core.Entities
 {
+    [DebuggerDisplay("{Value}")]
     public class BitString : List<Bit>
     {
         #region Constructor
@@ -30,6 +32,8 @@ namespace GeneticAlgorithms.Core.Entities
         }
 
         #region Overrides
+        public string Value => ToString();
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override string ToString() => string.Join("", this);
         #endregion
@@ -43,6 +47,8 @@ namespace GeneticAlgorithms.Core.Entities
                 Add(new Bit(bit));
             }
         }
+
+        private string GetDebuggerDisplay() => ToString();
         #endregion
     }
 }

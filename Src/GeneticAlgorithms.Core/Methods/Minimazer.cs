@@ -16,7 +16,7 @@ namespace GeneticAlgorithms.Core.Methods
             FirstPopulation = firstPopulation;
             F = f;
             M = m;
-            BetsIndivides = new List<BitString>();
+            BestIndivides = new List<BitString>();
             MOperator = new MutateOperator(Context.MutateProbability);
             COperator = new CrossOperator(Context.CrossProbability);
 
@@ -31,7 +31,7 @@ namespace GeneticAlgorithms.Core.Methods
         public Func<BitString, double> M { get; }
         public Func<BitString, double> Eval => (s) => F(M(s));
 
-        public IList<BitString> BetsIndivides { get; }
+        public IList<BitString> BestIndivides { get; }
 
         public MutateOperator MOperator { get; private set; }
         public CrossOperator COperator { get; private set; }
@@ -39,26 +39,30 @@ namespace GeneticAlgorithms.Core.Methods
 
         public BitString Minimize()
         {
-            var a = 0;
-
-
             var currentPopulation = FirstPopulation;
             var tMethod = new TournireMethod(currentPopulation, Context.TournireMethodIndividesCount);
 
             for (var i = 0; i < Context.MaxIterations; i++)
             {
-                BetsIndivides.Add(Evaluator.Eval(currentPopulation, Eval).individe);
+                BestIndivides.Add(Evaluator.Eval(currentPopulation, Eval).individe);
                 var i1 = tMethod.Select(Eval);
                 var i2 = tMethod.Select(Eval);
 
                 i1 = MOperator.Mutate(i1);
                 i2 = MOperator.Mutate(i2);
-                i1 = COperator.Cross(i1, i2).ElementAt(0);
-                i2 = COperator.Cross(i1, i2).ElementAt(1);
 
+                var crossed = COperator.Cross(i1, i2);
+
+                i1 = crossed.ElementAt(0);
+                i2 = crossed.ElementAt(1);
+                currentPopulation = new Population { i1, i2 };
+                for (var j = 0; j < Context.IndividesCount - 2; j++)
+                {
+                    currentPopulation.Add(MOperator.Mutate(tMethod.Select(Eval)));
+                }
             }
 
-            return default;
+            return BestIndivides.OrderBy(s => Eval(s)).First();
         }
 
         #region Overrides

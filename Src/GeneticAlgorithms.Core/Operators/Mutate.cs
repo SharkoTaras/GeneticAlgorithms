@@ -25,8 +25,9 @@ namespace GeneticAlgorithms.Core.Operators
             var randomNumber = random.NextDouble();
             if (randomNumber < MutateProbability)
             {
-                var ind = random.Next(0, str.Count + 1);
-                str[ind] = !str[ind];
+                var count = str.Count;
+                var ind = random.Next(0, str.Count);
+                str[count - ind - 1] = !str[count - ind - 1];
             }
             return str;
         }
