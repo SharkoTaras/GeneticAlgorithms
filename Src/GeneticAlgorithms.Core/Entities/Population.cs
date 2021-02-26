@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace GeneticAlgorithms.Core.Entities
 {
-    public class Population : List<BitString>
+    public class Population<TIndividual> : List<TIndividual>
     {
         #region Constructors
         public Population()

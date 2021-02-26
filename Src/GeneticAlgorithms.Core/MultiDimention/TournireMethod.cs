@@ -2,47 +2,42 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using GeneticAlgorithms.Core.Entities;
 
-namespace GeneticAlgorithms.Core.Methods
+namespace GeneticAlgorithms.Core.MultiDimention
 {
-    public class TournireMethod<T> : ISelector
+    public class TournireMethod
     {
-        #region Private fields
+        #region Private Fields
         private Random random;
         #endregion
 
         #region Constructors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public TournireMethod(Population<T> population, uint individualsCount)
+        public TournireMethod(uint individualsCount)
         {
             random = new Random();
-            Population = population;
             IndividualsCount = individualsCount;
         }
         #endregion
 
         #region Properties
-        public Population<T> Population { get; }
-
         public uint IndividualsCount { get; }
         #endregion
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public T Select(Evaluator evaluator)
+        public MDBitString Select(Func<MDBitString, double> eval)
         {
-            var list = new List<T>();
-            var count = Population.Count;
+            var list = new List<MDBitString>();
+            var count = 0;
             for (var i = 0; i < IndividualsCount; i++)
             {
                 var ind = random.Next(0, count);
-                list.Add(Population[ind]);
+                list.Add(null);
             }
-            return list.OrderBy(s => evaluator.Eval(s).Item1).First();
+            return list.OrderBy(s => eval(s)).First();
         }
 
         #region Overrides
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override string ToString() => base.ToString();
         #endregion
     }

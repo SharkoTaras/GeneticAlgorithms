@@ -5,7 +5,7 @@ using GeneticAlgorithms.Core.Entities;
 
 namespace GeneticAlgorithms.Core.Generators
 {
-    public class PopulationGenerator
+    public class BitsPopulationGenerator : IGenerator<BitString>
     {
         #region Private fields
         private Random random;
@@ -13,13 +13,13 @@ namespace GeneticAlgorithms.Core.Generators
 
         #region Constructors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public PopulationGenerator() => random = new Random();
+        public BitsPopulationGenerator() => random = new Random();
         #endregion
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Population Generate(uint membersCount, uint memberLenght)
+        public Population<BitString> Generate(uint membersCount, uint memberLenght)
         {
-            var population = new Population();
+            var population = new Population<BitString>();
             var sb = new StringBuilder();
             for (var i = 0; i < membersCount; i++)
             {

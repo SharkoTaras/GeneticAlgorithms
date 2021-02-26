@@ -5,6 +5,6 @@ namespace GeneticAlgorithms.Core.Methods
 {
     public interface ISelector
     {
-        BitString Select(Func<BitString, double> eval);
+        //BitString Select(Func<BitString, double> eval);
     }
 }

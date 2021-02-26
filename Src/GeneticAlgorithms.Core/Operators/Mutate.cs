@@ -1,5 +1,6 @@
 ﻿using System;
 using GeneticAlgorithms.Core.Entities;
+using GeneticAlgorithms.Core.MultiDimention;
 
 namespace GeneticAlgorithms.Core.Operators
 {
@@ -20,16 +21,37 @@ namespace GeneticAlgorithms.Core.Operators
         public double MutateProbability { get; }
         #endregion
 
-        public BitString Mutate(BitString str)
+        public T Mutate<T>(T s)
+            where T : class
         {
-            var randomNumber = random.NextDouble();
-            if (randomNumber < MutateProbability)
+            if (typeof(T) == typeof(BitString))
             {
-                var count = str.Count;
-                var ind = random.Next(0, str.Count);
-                str[count - ind - 1] = !str[count - ind - 1];
+                var str = s as BitString;
+                var randomNumber = random.NextDouble();
+                if (randomNumber < MutateProbability)
+                {
+                    var count = str.Count;
+                    var ind = random.Next(0, str.Count);
+                    str[count - ind - 1] = !str[count - ind - 1];
+                }
+
+                return str as T;
             }
-            return str;
+
+            if (typeof(T) == typeof(MDBitString))
+            {
+                var str = s as MDBitString;
+                var randomNumber = random.NextDouble();
+                if (randomNumber < MutateProbability)
+                {
+                    var count = str.Count;
+                    var ind = (uint)random.Next(0, count);
+                    str.SetAt(ind, !str.GetAt(ind));
+                }
+
+                return str as T;
+            }
+            return default;
         }
 
         #region Overrides

@@ -9,7 +9,7 @@ namespace GeneticAlgorithms.Tests
         [TestMethod]
         public void GenerateTest()
         {
-            var generator = new PopulationGenerator();
+            var generator = new BitsPopulationGenerator();
 
             var pop = generator.Generate(1, 3);
 

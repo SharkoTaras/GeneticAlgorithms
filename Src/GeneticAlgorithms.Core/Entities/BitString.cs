@@ -18,6 +18,10 @@ namespace GeneticAlgorithms.Core.Entities
         public BitString(string values) : base(values.Length) => ProcessString(values);
         #endregion
 
+        #region Properties
+        public string Value => ToString();
+        #endregion
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int ToNumber()
         {
@@ -32,7 +36,6 @@ namespace GeneticAlgorithms.Core.Entities
         }
 
         #region Overrides
-        public string Value => ToString();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override string ToString() => string.Join("", this);
